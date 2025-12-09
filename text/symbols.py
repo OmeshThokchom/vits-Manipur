@@ -9,8 +9,11 @@ _letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 _letters_ipa = "ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ"
 
 
+# Meitei Mayek (U+ABC0..U+ABFF) and Extensions (U+AAE0..U+AAFF)
+_meitei_mayek = "".join([chr(i) for i in range(0xABC0, 0xAC00)] + [chr(i) for i in range(0xAAE0, 0xAB00)])
+
 # Export all symbols:
-symbols = [_pad] + list(_punctuation) + list(_letters) + list(_letters_ipa)
+symbols = [_pad] + list(_punctuation) + list(_letters) + list(_letters_ipa) + list(_meitei_mayek)
 
 # Special symbol ids
 SPACE_ID = symbols.index(" ")

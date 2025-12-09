@@ -98,3 +98,59 @@ def english_cleaners2(text):
   phonemes = phonemize(text, language='en-us', backend='espeak', strip=True, preserve_punctuation=True, with_stress=True)
   phonemes = collapse_whitespace(phonemes)
   return phonemes
+
+
+def meitei_english_cleaners(text):
+  '''Pipeline for mixed Meitei Mayek (Native) and English (IPA).
+  English text is converted to IPA using phonemizer.
+  Meitei Mayek text is preserved as is.
+  '''
+  import re
+  import os
+  from phonemizer import phonemize
+  
+  # AUTO-DETECT: Add eSpeak NG to PATH if on Windows and not found
+  # AUTO-DETECT: Add eSpeak NG to PATH if on Windows and not found
+  if os.name == 'nt':
+      # Common default install location for eSpeak NG on Windows
+      espeak_path = os.path.join(os.environ.get('ProgramFiles', r'C:\Program Files'), 'eSpeak NG')
+      
+      if os.path.exists(espeak_path):
+          # Add to PATH if not present
+          if espeak_path not in os.environ['PATH']:
+              os.environ['PATH'] += os.pathsep + espeak_path
+          
+          # Set library path for phonemizer
+          lib_path = os.path.join(espeak_path, "libespeak-ng.dll")
+          if os.path.exists(lib_path):
+              os.environ['PHONEMIZER_ESPEAK_LIBRARY'] = lib_path
+
+  # Regex to find English words (sequences of ASCII letters)
+  # We group English words together to preserve context for phonemization
+  english_pattern = re.compile(r'([a-zA-Z]+(?:[ \.,;!?"\']+[a-zA-Z]*)*)')
+  
+  parts = english_pattern.split(text)
+  cleaned_parts = []
+  
+  for part in parts:
+    if not part:
+      continue
+    
+    # Check if this part is English (contains letters)
+    if re.search(r'[a-zA-Z]', part):
+      # It's English, phonemize it
+      # We use espeak backend
+      try:
+        phonemes = phonemize(part, language='en-us', backend='espeak', strip=True, preserve_punctuation=True, with_stress=True)
+        cleaned_parts.append(phonemes)
+      except Exception as e:
+        # Fallback if phonemizer fails (e.g. not installed properly yet)
+        print(f"Phonemizer failed on '{part}': {e}")
+        cleaned_parts.append(part)
+    else:
+      # It's Meitei or just punctuation/spaces, keep as is
+      cleaned_parts.append(part)
+      
+  text = "".join(cleaned_parts)
+  text = collapse_whitespace(text)
+  return text
