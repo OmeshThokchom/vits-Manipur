@@ -151,6 +151,6 @@ def meitei_english_cleaners(text):
       # It's Meitei or just punctuation/spaces, keep as is
       cleaned_parts.append(part)
       
-  text = "".join(cleaned_parts)
+  text = " ".join(cleaned_parts)
   text = collapse_whitespace(text)
   return text
