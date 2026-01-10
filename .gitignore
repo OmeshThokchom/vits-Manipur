@@ -1,12 +1,37 @@
-DUMMY1
-DUMMY2
-DUMMY3
-logs
-__pycache__
-.ipynb_checkpoints
-.*.swp
+# Logs and checkpoints
+logs/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
 
-build
+# Build files
+build/
 *.c
-monotonic_align/monotonic_align
-test_cleaner.py
+*.so
+*.pyd
+monotonic_align/monotonic_align/
+
+# Dataset folders (add your own data here)
+VITS_TEST_WAV/
+inference_output/
+
+# Editor files
+.*.swp
+*.swp
+.vscode/
+
+# Original LJS/VCTK filelists (not needed for Meitei)
+filelists/ljs_*
+filelists/vctk_*
+
+# Ignore actual training data filelists (keep examples)
+filelists/meitei_train.txt
+filelists/meitei_val.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+venv/

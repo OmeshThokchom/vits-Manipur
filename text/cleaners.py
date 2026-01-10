@@ -154,3 +154,15 @@ def meitei_english_cleaners(text):
   text = " ".join(cleaned_parts)
   text = collapse_whitespace(text)
   return text
+
+
+# =============================================================================
+# NATIVE MEITEI MAYEK CLEANER (No phonemization - Meitei is already phonetic!)
+# =============================================================================
+def meitei_cleaners(text):
+  '''Simple cleaner for pure Meitei Mayek text.
+  No phonemization needed since Meitei Mayek script is phonetic.
+  '''
+  text = text.strip()
+  text = collapse_whitespace(text)
+  return text

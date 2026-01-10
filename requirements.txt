@@ -1,10 +1,20 @@
-Cython==0.29.21
-librosa==0.8.0
-matplotlib==3.3.1
-numpy==1.18.5
-phonemizer==2.2.1
-scipy==1.5.2
-tensorboard==2.3.0
-torch==1.6.0
-torchvision==0.7.0
-Unidecode==1.1.1
+# VITS Requirements for Meitei Mayek TTS
+# 
+# For CPU training (testing):
+#   pip install -r requirements.txt
+#
+# For GPU training (production):
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+#   pip install -r requirements.txt
+
+Cython>=0.29.21
+librosa>=0.9.0
+matplotlib>=3.5.0
+numpy>=1.21.0,<2.0.0
+scipy>=1.7.0
+tensorboard>=2.10.0
+Unidecode>=1.3.0
+
+# PyTorch (CPU version - for GPU, install separately with CUDA)
+torch>=1.12.0
+torchvision>=0.13.0

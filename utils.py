@@ -95,8 +95,10 @@ def plot_spectrogram_to_numpy(spectrogram):
   plt.tight_layout()
 
   fig.canvas.draw()
-  data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-  data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+  buf = fig.canvas.buffer_rgba()
+  data = np.frombuffer(buf, dtype=np.uint8)
+  data = data.reshape(fig.canvas.get_width_height()[::-1] + (4,))
+  data = data[:, :, :3]  # Remove alpha channel
   plt.close()
   return data
 
@@ -124,8 +126,10 @@ def plot_alignment_to_numpy(alignment, info=None):
   plt.tight_layout()
 
   fig.canvas.draw()
-  data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-  data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+  buf = fig.canvas.buffer_rgba()
+  data = np.frombuffer(buf, dtype=np.uint8)
+  data = data.reshape(fig.canvas.get_width_height()[::-1] + (4,))
+  data = data[:, :, :3]  # Remove alpha channel
   plt.close()
   return data
 

@@ -1,0 +1,12 @@
+# Example Meitei Mayek Filelist Format
+# Format: audio_path|text
+# 
+# Example entries:
+# dataset/wavs/sample_001.wav|ꯃꯅꯤꯄꯨꯔ
+# dataset/wavs/sample_002.wav|ꯅꯣꯡꯄꯣꯛ ꯀꯌꯥ
+# dataset/wavs/sample_003.wav|ꯁꯅꯥꯃꯅꯤ ꯃꯨꯇꯥ ꯊꯥꯎ
+#
+# Notes:
+# - Audio files should be 22050 Hz WAV format
+# - Text should be in native Meitei Mayek script
+# - Run prepare_filelists.py to generate from your metadata.txt
