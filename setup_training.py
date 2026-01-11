@@ -44,7 +44,17 @@ def main():
     print("\n[2/5] Building Monotonic Align...")
     monotonic_path = Path("monotonic_align")
     if monotonic_path.exists():
-        run_command("python setup.py build_ext --inplace", cwd=str(monotonic_path))
+        try:
+            run_command("python setup.py build_ext --inplace", cwd=str(monotonic_path))
+        except SystemExit:
+            print("\n⚠️  Build failed. Attempting to fix by creating subdirectory...")
+            # Sometimes setuptools wants the package dir to exist
+            (monotonic_path / "monotonic_align").mkdir(exist_ok=True)
+            try:
+                run_command("python setup.py build_ext --inplace", cwd=str(monotonic_path))
+            except:
+                print("Build failed again. Please check the error message above.")
+                sys.exit(1)
     else:
         print("Error: monotonic_align directory not found!")
         sys.exit(1)
