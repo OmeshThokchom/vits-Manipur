@@ -55,7 +55,14 @@ def main():
   os.environ['MASTER_PORT'] = '29500'
 
   hps = utils.get_hparams()
-  mp.spawn(run, nprocs=n_gpus, args=(n_gpus, hps,))
+  try:
+    mp.spawn(run, nprocs=n_gpus, args=(n_gpus, hps,))
+  except Exception as e:
+    import traceback
+    with open("error_log.txt", "w") as f:
+      f.write(traceback.format_exc())
+    print("CRASHED! Check error_log.txt")
+    raise e
 
 
 def run(rank, n_gpus, hps):
