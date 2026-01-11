@@ -121,9 +121,15 @@ def main():
          print("Dataset appears to be already extracted.")
     else:
         print(f"Extracting {local_zip_path}...")
-        with zipfile.ZipFile(local_zip_path, 'r') as zip_ref:
-            zip_ref.extractall(dataset_dir)
-        print("Extraction complete.")
+        # Try using system unzip first (much faster)
+        try:
+            run_command(f"unzip -q -o {local_zip_path} -d {dataset_dir}")
+            print("Extraction complete (using unzip).")
+        except:
+            print("System unzip failed or not found. Falling back to Python zipfile (slower)...")
+            with zipfile.ZipFile(local_zip_path, 'r') as zip_ref:
+                zip_ref.extractall(dataset_dir)
+            print("Extraction complete (using zipfile).")
 
     # 5. Prepare Filelists
     print("\n[5/5] Preparing Filelists...")
