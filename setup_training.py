@@ -135,6 +135,22 @@ def main():
     print("\n[5/5] Preparing Filelists...")
     run_command("python prepare_filelists.py")
 
+    # 6. Setup Logs Symlink (to use Container storage)
+    print("\n[6/6] Setting up Logs Storage...")
+    logs_path = Path("logs")
+    container_logs = Path("/root/vits_logs")
+    
+    if not logs_path.exists() and not logs_path.is_symlink():
+        print(f"Creating symlink: logs -> {container_logs}")
+        print("⚠️  WARNING: Checkpoints will be stored in the Container disk.")
+        print("    If you terminate the pod, these files will be LOST.")
+        print("    Make sure to download your checkpoints before stopping the pod!")
+        
+        container_logs.mkdir(parents=True, exist_ok=True)
+        os.symlink(container_logs, logs_path)
+    else:
+        print("Logs directory already exists. Skipping symlink.")
+
     print("\n" + "="*60)
     print("  Setup Complete! Ready to Train.")
     print("="*60)
