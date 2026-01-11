@@ -14,7 +14,7 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
 
 import re
 from unidecode import unidecode
-from phonemizer import phonemize
+# from phonemizer import phonemize
 
 
 # Regular expression matching whitespace:
@@ -82,6 +82,7 @@ def transliteration_cleaners(text):
 
 def english_cleaners(text):
   '''Pipeline for English text, including abbreviation expansion.'''
+  from phonemizer import phonemize
   text = convert_to_ascii(text)
   text = lowercase(text)
   text = expand_abbreviations(text)
@@ -92,6 +93,7 @@ def english_cleaners(text):
 
 def english_cleaners2(text):
   '''Pipeline for English text, including abbreviation expansion. + punctuation + stress'''
+  from phonemizer import phonemize
   text = convert_to_ascii(text)
   text = lowercase(text)
   text = expand_abbreviations(text)
@@ -109,7 +111,6 @@ def meitei_english_cleaners(text):
   import os
   from phonemizer import phonemize
   
-  # AUTO-DETECT: Add eSpeak NG to PATH if on Windows and not found
   # AUTO-DETECT: Add eSpeak NG to PATH if on Windows and not found
   if os.name == 'nt':
       # Common default install location for eSpeak NG on Windows

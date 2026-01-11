@@ -134,6 +134,37 @@ def plot_alignment_to_numpy(alignment, info=None):
   return data
 
 
+def clean_checkpoints(path_to_models='logs/44k/', n_ckpts_to_keep=5, sort_by_time=True):
+  """
+  Automatically clean old checkpoints, keeping only the N most recent ones.
+  """
+  import glob
+  import os
+  
+  # Find all generator and discriminator checkpoints
+  g_ckpts = sorted(glob.glob(os.path.join(path_to_models, 'G_*.pth')), key=os.path.getmtime if sort_by_time else lambda x: int(os.path.basename(x).split('_')[1].split('.')[0]))
+  d_ckpts = sorted(glob.glob(os.path.join(path_to_models, 'D_*.pth')), key=os.path.getmtime if sort_by_time else lambda x: int(os.path.basename(x).split('_')[1].split('.')[0]))
+  
+  # Remove old Generator checkpoints
+  if len(g_ckpts) > n_ckpts_to_keep:
+    to_remove = g_ckpts[:-n_ckpts_to_keep]
+    for ckpt in to_remove:
+      try:
+        os.remove(ckpt)
+        print(f"Removed old checkpoint: {ckpt}")
+      except Exception as e:
+        print(f"Error removing {ckpt}: {e}")
+        
+  # Remove old Discriminator checkpoints
+  if len(d_ckpts) > n_ckpts_to_keep:
+    to_remove = d_ckpts[:-n_ckpts_to_keep]
+    for ckpt in to_remove:
+      try:
+        os.remove(ckpt)
+      except Exception as e:
+        print(f"Error removing {ckpt}: {e}")
+
+
 def load_wav_to_torch(full_path):
   sampling_rate, data = read(full_path)
   return torch.FloatTensor(data.astype(np.float32)), sampling_rate
