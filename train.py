@@ -127,13 +127,21 @@ def run(rank, n_gpus, hps):
 
   scaler = GradScaler(enabled=hps.train.fp16_run)
 
-  for epoch in range(epoch_str, hps.train.epochs + 1):
-    if rank==0:
-      train_and_evaluate(rank, epoch, hps, [net_g, net_d], [optim_g, optim_d], [scheduler_g, scheduler_d], scaler, [train_loader, eval_loader], logger, [writer, writer_eval])
-    else:
-      train_and_evaluate(rank, epoch, hps, [net_g, net_d], [optim_g, optim_d], [scheduler_g, scheduler_d], scaler, [train_loader, None], None, None)
-    scheduler_g.step()
-    scheduler_d.step()
+  try:
+    for epoch in range(epoch_str, hps.train.epochs + 1):
+      if rank==0:
+        train_and_evaluate(rank, epoch, hps, [net_g, net_d], [optim_g, optim_d], [scheduler_g, scheduler_d], scaler, [train_loader, eval_loader], logger, [writer, writer_eval])
+      else:
+        train_and_evaluate(rank, epoch, hps, [net_g, net_d], [optim_g, optim_d], [scheduler_g, scheduler_d], scaler, [train_loader, None], None, None)
+      scheduler_g.step()
+      scheduler_d.step()
+  except KeyboardInterrupt:
+    if rank == 0:
+      print("\n\n[INFO] Interrupted! Saving checkpoint before exit...")
+      utils.save_checkpoint(net_g, optim_g, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "G_interrupted.pth"))
+      utils.save_checkpoint(net_d, optim_d, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "D_interrupted.pth"))
+      print("[INFO] Checkpoint saved: G_interrupted.pth")
+    sys.exit(0)
 
 
 def train_and_evaluate(rank, epoch, hps, nets, optims, schedulers, scaler, loaders, logger, writers):
@@ -241,6 +249,8 @@ def train_and_evaluate(rank, epoch, hps, nets, optims, schedulers, scaler, loade
         utils.save_checkpoint(net_d, optim_d, hps.train.learning_rate, epoch, os.path.join(hps.model_dir, "D_{}.pth".format(global_step)))
         utils.clean_checkpoints(hps.model_dir, n_ckpts_to_keep=5, sort_by_time=True)
     global_step += 1
+  
+
   
   if rank == 0:
     logger.info('====> Epoch: {}'.format(epoch))
