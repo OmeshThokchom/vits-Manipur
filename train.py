@@ -37,6 +37,14 @@ from text.symbols import symbols
 torch.backends.cudnn.benchmark = True
 global_step = 0
 
+# Silence Numba logs
+import logging
+logging.getLogger('numba').setLevel(logging.WARNING)
+
+# Silence warnings
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
 
 def main():
   """Assume Single Node Multi GPUs Training Only"""
