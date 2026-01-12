@@ -62,7 +62,7 @@ def upload_checkpoints(repo_id, log_dir):
 
 if __name__ == "__main__":
     # Configuration
-    DEFAULT_REPO = "DayanandaThokchom/MT-TTS-PROD"
+    DEFAULT_REPO = "DayanandaThokchom/EmaLonTTS"
     LOG_DIR = "logs/meitei_v1"
     
     print("="*60)
