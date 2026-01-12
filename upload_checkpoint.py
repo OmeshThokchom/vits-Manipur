@@ -70,6 +70,12 @@ if __name__ == "__main__":
     print("="*60)
     
     repo_input = input(f"Target Repo ID [{DEFAULT_REPO}]: ").strip()
+    
+    if repo_input.startswith("hf_"):
+        print("\n❌ Error: It looks like you pasted a Token instead of a Repo ID!")
+        print("      Repo ID should look like: 'Username/ModelName'")
+        sys.exit(1)
+
     REPO_ID = repo_input if repo_input else DEFAULT_REPO
     
     upload_checkpoints(REPO_ID, LOG_DIR)
