@@ -61,21 +61,23 @@ def upload_checkpoints(repo_id, log_dir):
         print(f"\n❌ Error uploading: {e}")
 
 if __name__ == "__main__":
-    # Configuration
-    DEFAULT_REPO = "DayanandaThokchom/EmaLonTTS"
-    LOG_DIR = "logs/meitei_v1"
+    import argparse
+    
+    # Configuration defaults
+    DEFAULT_REPO = "DayanandaThokchom/finetune-model_emalonTTS"
+    DEFAULT_LOG_DIR = "logs/meitei_finetune"  # Changed for fine-tuning
+    
+    parser = argparse.ArgumentParser(description="Upload checkpoints to Hugging Face")
+    parser.add_argument("--repo", default=DEFAULT_REPO, help=f"Target repo ID (default: {DEFAULT_REPO})")
+    parser.add_argument("--log-dir", default=DEFAULT_LOG_DIR, help=f"Log directory (default: {DEFAULT_LOG_DIR})")
+    args = parser.parse_args()
     
     print("="*60)
     print("  Hugging Face Model Uploader")
     print("="*60)
     
-    repo_input = input(f"Target Repo ID [{DEFAULT_REPO}]: ").strip()
+    print(f"Repo: {args.repo}")
+    print(f"Log Dir: {args.log_dir}")
     
-    if repo_input.startswith("hf_"):
-        print("\n❌ Error: It looks like you pasted a Token instead of a Repo ID!")
-        print("      Repo ID should look like: 'Username/ModelName'")
-        sys.exit(1)
+    upload_checkpoints(args.repo, args.log_dir)
 
-    REPO_ID = repo_input if repo_input else DEFAULT_REPO
-    
-    upload_checkpoints(REPO_ID, LOG_DIR)
